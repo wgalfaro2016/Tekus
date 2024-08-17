@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PruebaTecnicaTekus.Commands.Providers;
 using PruebaTecnicaTekus.Dtos;
+using PruebaTecnicaTekus.Queries.CustomProviderField;
 using PruebaTecnicaTekus.Queries.Providers;
 
 namespace PruebaTecnicaTekus.Controllers
@@ -60,6 +61,16 @@ namespace PruebaTecnicaTekus.Controllers
                 return NotFound();
             }
             return Ok(provider);
+        }
+
+        [HttpGet("GetProviderWithCustomFields/{id}")]
+        public async Task<ActionResult<ProviderWithCustomFieldsDto>> GetProviderWithCustomFields(int id) {
+            var query = new GetProviderWithCustomFieldsQuery { ID = id };
+            var providerWithCustomFields = await _mediator.Send(query);
+            if (providerWithCustomFields == null) {
+                return NotFound();
+            }
+            return Ok(providerWithCustomFields);
         }
 
     }

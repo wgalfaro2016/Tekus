@@ -14,6 +14,7 @@ namespace PruebaTecnicaTekus.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<ProviderService> ProviderServices { get; set; }
         public DbSet<ServiceCountry> ServiceCountries { get; set; }
+        public DbSet<CustomProviderField> CustomProviderFields { get; set; }
 
     }
 }

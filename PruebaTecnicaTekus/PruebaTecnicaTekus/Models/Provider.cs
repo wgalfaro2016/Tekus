@@ -9,7 +9,7 @@
         public string Address { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-
+        public ICollection<CustomProviderField> CustomProviderFields { get; set; } = new List<CustomProviderField>();
         public ICollection<ProviderService> ProviderServices { get; set; }
     }
 }
