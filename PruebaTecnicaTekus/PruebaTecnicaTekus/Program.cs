@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using PruebaTecnicaTekus.Commands.Providers;
 using PruebaTecnicaTekus.Data;
+using PruebaTecnicaTekus.Queries.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,15 +11,25 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
 builder.Services.AddDbContext<TekusContext>(
 opts => opts.UseSqlServer(
-                builder.Configuration.GetConnectionString("Tekus"),
+                builder.Configuration.GetConnectionString("TekusDb"),
                 options => options.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null)
             )
 );
+builder.Services.AddAutoMapper(typeof(Program));
+
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(GetProviderByIdQuery).Assembly,
+    typeof(GetProvidersQuery).Assembly,
+    typeof(CreateProviderCommand).Assembly,
+    typeof(UpdateProviderCommand).Assembly
+));
+
+var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
