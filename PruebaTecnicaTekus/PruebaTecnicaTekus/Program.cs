@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaTekus.Commands.Providers;
+using PruebaTecnicaTekus.Commands.ProviderServices;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Queries.Providers;
+using PruebaTecnicaTekus.Queries.ProvidersServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(GetProviderByIdQuery).Assembly,
     typeof(GetProvidersQuery).Assembly,
     typeof(CreateProviderCommand).Assembly,
-    typeof(UpdateProviderCommand).Assembly
+    typeof(UpdateProviderCommand).Assembly,
+    typeof(GetProviderServicesQuery).Assembly,
+    typeof(GetProviderServiceByIdQuery).Assembly,
+    typeof(CreateProviderServiceCommand).Assembly,
+    typeof(UpdateProviderServiceCommand).Assembly
 ));
 
 var app = builder.Build();

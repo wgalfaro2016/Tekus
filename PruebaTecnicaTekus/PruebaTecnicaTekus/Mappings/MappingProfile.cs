@@ -8,7 +8,8 @@ namespace PruebaTecnicaTekus.Mappings
     {
         public MappingProfile() {
             CreateMap<Provider, ProviderDto>();
-            
+            CreateMap<ProviderService, ProviderServiceDto>();
+            CreateMap<ProviderDto, Provider>();  
         }
     }
 }

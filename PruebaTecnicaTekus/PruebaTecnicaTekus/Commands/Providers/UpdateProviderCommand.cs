@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using PruebaTecnicaTekus.Data;
+using PruebaTecnicaTekus.Response.Providers;
 
 namespace PruebaTecnicaTekus.Commands.Providers
 {
-    public class UpdateProviderCommand : IRequest
+    public class UpdateProviderCommand : IRequest<ProviderResponse>
     {
         public int ProviderID { get; set; }
         public string Name { get; set; }
@@ -14,7 +15,7 @@ namespace PruebaTecnicaTekus.Commands.Providers
         public string Email { get; set; }
     }
 
-    public class UpdateProviderCommandHandler : IRequest<bool>
+    public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderCommand,ProviderResponse>
     {
         private readonly TekusContext _context;
 
@@ -22,10 +23,13 @@ namespace PruebaTecnicaTekus.Commands.Providers
             _context = context;
         }
 
-        public async Task<bool> Handle(UpdateProviderCommand request, CancellationToken cancellationToken) {
+        public async Task<ProviderResponse> Handle(UpdateProviderCommand request, CancellationToken cancellationToken) {
             var provider = await _context.Providers.FindAsync(request.ProviderID);
             if (provider == null) {
-                return false;
+                return new ProviderResponse {
+                    IsSuccess = false,
+                    ProviderId = null
+                };
             }
 
             provider.Name = request.Name;
@@ -35,9 +39,19 @@ namespace PruebaTecnicaTekus.Commands.Providers
             provider.Phone = request.Phone;
             provider.Email = request.Email;
 
-            await _context.SaveChangesAsync(cancellationToken);
+            var result = await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            if (result > 0) {
+                return new ProviderResponse {
+                    IsSuccess = true,
+                    ProviderId = provider.ProviderID
+                };
+            }
+
+            return new ProviderResponse {
+                IsSuccess = false,
+                ProviderId = null
+            };
         }
 
       

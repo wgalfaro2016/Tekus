@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Models;
+using PruebaTecnicaTekus.Response.Providers;
 
 namespace PruebaTecnicaTekus.Commands.Providers
 {
-    public class CreateProviderCommand : IRequest<bool>
+    public class CreateProviderCommand : IRequest<ProviderResponse>
     {
         public string Name { get; set; }
         public string LegalName { get; set; }
@@ -14,7 +15,7 @@ namespace PruebaTecnicaTekus.Commands.Providers
         public string Email { get; set; }
     }
 
-    public class CreateProviderCommandHandler : IRequestHandler<CreateProviderCommand, bool>
+    public class CreateProviderCommandHandler : IRequestHandler<CreateProviderCommand, ProviderResponse>
     {
         private readonly TekusContext _context;
 
@@ -22,7 +23,7 @@ namespace PruebaTecnicaTekus.Commands.Providers
             _context = context;
         }
 
-        public async Task<bool> Handle(CreateProviderCommand request, CancellationToken cancellationToken) {
+        public async Task<ProviderResponse> Handle(CreateProviderCommand request, CancellationToken cancellationToken) {
             var provider = new Provider {
                 Name = request.Name,
                 LegalName = request.LegalName,
@@ -33,9 +34,19 @@ namespace PruebaTecnicaTekus.Commands.Providers
             };
 
             _context.Providers.Add(provider);
-            await _context.SaveChangesAsync(cancellationToken);
+            var result = await _context.SaveChangesAsync(cancellationToken);
 
-            return true;
+            if (result > 0) {
+                return new ProviderResponse {
+                    IsSuccess = true,
+                    ProviderId = provider.ProviderID
+                };
+            }
+
+            return new ProviderResponse {
+                IsSuccess = false,
+                ProviderId = null
+            };
         }
     }
 }
