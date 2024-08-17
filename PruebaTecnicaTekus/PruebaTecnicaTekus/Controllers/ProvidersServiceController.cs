@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PruebaTecnicaTekus.Commands.ProviderServices;
 using PruebaTecnicaTekus.Dtos;
@@ -6,6 +7,7 @@ using PruebaTecnicaTekus.Queries.ProvidersServices;
 
 namespace PruebaTecnicaTekus.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProvidersServiceController : ControllerBase
