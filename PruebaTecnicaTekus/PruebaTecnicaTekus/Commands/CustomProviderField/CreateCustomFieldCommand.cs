@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PruebaTecnicaTekus.Data;
+using PruebaTecnicaTekus.Repositories.CustomProviderFields;
 using PruebaTecnicaTekus.Response.CustomProviderFieldResponse;
 
 namespace PruebaTecnicaTekus.Commands.CustomProviderField
@@ -14,10 +15,10 @@ namespace PruebaTecnicaTekus.Commands.CustomProviderField
 
     public class CreateCustomFieldCommandHandler : IRequestHandler<CreateCustomFieldCommand, CustomProviderFieldResponse>
     {
-        private readonly TekusContext _context;
+        private readonly ICustomProviderFieldRepository _repository;
 
-        public CreateCustomFieldCommandHandler(TekusContext context) {
-            _context = context;
+        public CreateCustomFieldCommandHandler(TekusContext context, ICustomProviderFieldRepository repository) {
+            _repository = repository;
         }
 
         public async Task<CustomProviderFieldResponse> Handle(CreateCustomFieldCommand request, CancellationToken cancellationToken)
@@ -29,8 +30,7 @@ namespace PruebaTecnicaTekus.Commands.CustomProviderField
                 FieldType = request.FieldType
             };
 
-            _context.CustomProviderFields.Add(customProviderField);
-            var result = await _context.SaveChangesAsync(cancellationToken);
+            var result = await _repository.AddAsync(customProviderField);
 
             if (result > 0) {
                 return new CustomProviderFieldResponse {

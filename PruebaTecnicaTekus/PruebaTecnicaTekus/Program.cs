@@ -5,8 +5,12 @@ using Microsoft.OpenApi.Models;
 using PruebaTecnicaTekus.Commands.Providers;
 using PruebaTecnicaTekus.Commands.ProviderServices;
 using PruebaTecnicaTekus.Data;
+using PruebaTecnicaTekus.Models;
+using PruebaTecnicaTekus.Queries.CustomProviderField;
 using PruebaTecnicaTekus.Queries.Providers;
 using PruebaTecnicaTekus.Queries.ProvidersServices;
+using PruebaTecnicaTekus.Repositories.CustomProviderFields;
+using PruebaTecnicaTekus.Repositories.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,7 +62,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(GetProviderServicesQuery).Assembly,
     typeof(GetProviderServiceByIdQuery).Assembly,
     typeof(CreateProviderServiceCommand).Assembly,
-    typeof(UpdateProviderServiceCommand).Assembly
+    typeof(UpdateProviderServiceCommand).Assembly,
+    typeof(GetCustomProviderFieldByIdQuery).Assembly
 ));
 
 // JWT Authentication setup
@@ -77,6 +82,8 @@ builder.Services.AddAuthentication(options => {
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddTransient<ICustomProviderFieldRepository, CustomProviderFieldRepository>();
+builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
 
 var app = builder.Build();
 
