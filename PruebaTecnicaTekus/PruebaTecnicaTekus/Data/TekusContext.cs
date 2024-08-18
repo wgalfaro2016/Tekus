@@ -17,11 +17,14 @@ namespace PruebaTecnicaTekus.Data
         public DbSet<ServiceCountry> ServiceCountries { get; set; }
         public DbSet<CustomProviderField> CustomProviderFields { get; set; }
         public DbSet<ServicesByCountryDto> ServicesByCountryDtos { get; set; }
+        public DbSet<ProvidersByCountryDto> ProvidersByCountryDtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ServicesByCountryDto>().HasNoKey();
+
+            modelBuilder.Entity<ProvidersByCountryDto>().HasNoKey();
         }
 
     }

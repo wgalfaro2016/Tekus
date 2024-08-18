@@ -64,13 +64,21 @@ namespace PruebaTecnicaTekus.Controllers
         }
 
         [HttpGet("GetProviderWithCustomFields/{id}")]
-        public async Task<ActionResult<ProviderWithCustomFieldsDto>> GetProviderWithCustomFields(int id) {
+        public async Task<ActionResult<ProviderWithCustomFieldsDto>> GetProviderWithCustomFields(int id) 
+        {
             var query = new GetProviderWithCustomFieldsQuery { ID = id };
             var providerWithCustomFields = await _mediator.Send(query);
             if (providerWithCustomFields == null) {
                 return NotFound();
             }
             return Ok(providerWithCustomFields);
+        }
+
+        [HttpGet("providers-by-country")]
+        public async Task<ActionResult<List<ProvidersByCountryDto>>> GetProvidersByCountry() {
+            var query = new GetProvidersByCountryQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
     }
