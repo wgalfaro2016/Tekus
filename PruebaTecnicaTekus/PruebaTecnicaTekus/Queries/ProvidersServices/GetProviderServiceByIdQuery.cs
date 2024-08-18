@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Dtos;
+using PruebaTecnicaTekus.Repositories.ProviderServices;
 
 namespace PruebaTecnicaTekus.Queries.ProvidersServices
 {
@@ -13,17 +14,16 @@ namespace PruebaTecnicaTekus.Queries.ProvidersServices
 
     public class GetProviderServiceByIdQueryHandler : IRequestHandler<GetProviderServiceByIdQuery, ProviderServiceDto>
     {
-        private readonly TekusContext _context;
+        private readonly IProviderServicesRepository _providerServicesRepository;
         private readonly IMapper _mapper;
 
-        public GetProviderServiceByIdQueryHandler(TekusContext context, IMapper mapper) {
-            _context = context;
+        public GetProviderServiceByIdQueryHandler(IProviderServicesRepository providerServicesRepository, IMapper mapper) {
+            _providerServicesRepository = providerServicesRepository;
             _mapper = mapper;
         }
 
         public async Task<ProviderServiceDto> Handle(GetProviderServiceByIdQuery request, CancellationToken cancellationToken) {
-            var providerService = await _context.ProviderServices
-                .FirstOrDefaultAsync(ps => ps.ProviderServiceID == request.Id, cancellationToken);
+            var providerService = await _providerServicesRepository.GetByIdAsync(request.Id);
 
             if (providerService == null) {
                 return null;

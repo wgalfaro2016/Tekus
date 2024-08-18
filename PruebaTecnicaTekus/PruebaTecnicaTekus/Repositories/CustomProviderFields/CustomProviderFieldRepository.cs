@@ -1,4 +1,5 @@
-﻿using PruebaTecnicaTekus.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Models;
 
 namespace PruebaTecnicaTekus.Repositories.CustomProviderFields
@@ -15,9 +16,6 @@ namespace PruebaTecnicaTekus.Repositories.CustomProviderFields
             _context.CustomProviderFields.Add(customProviderField);
             return await _context.SaveChangesAsync();
         }
-
-        public async Task<CustomProviderField> GetByIdAsync(int id) {
-            return await _context.CustomProviderFields.FindAsync(id);
-        }
+    
     }
 }

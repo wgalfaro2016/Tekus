@@ -11,6 +11,7 @@ using PruebaTecnicaTekus.Queries.Providers;
 using PruebaTecnicaTekus.Queries.ProvidersServices;
 using PruebaTecnicaTekus.Repositories.CustomProviderFields;
 using PruebaTecnicaTekus.Repositories.Providers;
+using PruebaTecnicaTekus.Repositories.ProviderServices;
 using PruebaTecnicaTekus.Repositories.Services;
 using System.Text;
 
@@ -86,6 +87,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddTransient<ICustomProviderFieldRepository, CustomProviderFieldRepository>();
 builder.Services.AddTransient<IServiceRepository, ServiceRepository>();
 builder.Services.AddTransient<IProvidersRepository, ProvidersRepository>();
+builder.Services.AddTransient<IProviderServicesRepository, ProviderServicesRepository>();
+
 
 var app = builder.Build();
 

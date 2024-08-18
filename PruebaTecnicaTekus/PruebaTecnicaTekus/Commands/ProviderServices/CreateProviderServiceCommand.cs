@@ -3,6 +3,7 @@ using MediatR;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Dtos;
 using PruebaTecnicaTekus.Models;
+using PruebaTecnicaTekus.Repositories.ProviderServices;
 using PruebaTecnicaTekus.Response.ProvidersService;
 
 namespace PruebaTecnicaTekus.Commands.ProviderServices
@@ -16,11 +17,12 @@ namespace PruebaTecnicaTekus.Commands.ProviderServices
 
     public class CreateProviderServiceCommandHandler : IRequestHandler<CreateProviderServiceCommand, ProviderServiceResponse>
     {
-        private readonly TekusContext _context;
+        private readonly IProviderServicesRepository _providerServicesRepository;
         private readonly IMapper _mapper;
 
-        public CreateProviderServiceCommandHandler(TekusContext context, IMapper mapper) {
-            _context = context;
+        public CreateProviderServiceCommandHandler(IProviderServicesRepository providerServicesRepository, IMapper mapper) 
+        {
+            _providerServicesRepository = providerServicesRepository;
             _mapper = mapper;
         }
 
@@ -31,8 +33,7 @@ namespace PruebaTecnicaTekus.Commands.ProviderServices
                 StartDate = request.StartDate
             };
 
-            _context.ProviderServices.Add(providerService);
-            var result = await _context.SaveChangesAsync(cancellationToken);
+            var result = await _providerServicesRepository.AddAsync(providerService);
 
             if (result > 0) {
                 return new ProviderServiceResponse {

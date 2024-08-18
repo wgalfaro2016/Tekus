@@ -3,6 +3,7 @@ using MediatR;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Dtos;
 using PruebaTecnicaTekus.Models;
+using PruebaTecnicaTekus.Repositories.ProviderServices;
 using PruebaTecnicaTekus.Response.Providers;
 using PruebaTecnicaTekus.Response.ProvidersService;
 
@@ -18,16 +19,17 @@ namespace PruebaTecnicaTekus.Commands.ProviderServices
 
     public class UpdateProviderServiceCommandHandler : IRequestHandler<UpdateProviderServiceCommand, ProviderServiceResponse>
     {
-        private readonly TekusContext _context;
+        private readonly IProviderServicesRepository _providerServicesRepository;
         private readonly IMapper _mapper;
 
-        public UpdateProviderServiceCommandHandler(TekusContext context, IMapper mapper) {
-            _context = context;
+        public UpdateProviderServiceCommandHandler(IProviderServicesRepository providerServicesRepository, IMapper mapper) 
+        {
+            _providerServicesRepository = providerServicesRepository;
             _mapper = mapper;
         }
 
         public async Task<ProviderServiceResponse> Handle(UpdateProviderServiceCommand request, CancellationToken cancellationToken) {
-            var providerService = await _context.ProviderServices.FindAsync(request.ProviderServiceId);
+            var providerService = await _providerServicesRepository.GetByIdAsync(request.ProviderServiceId);
 
             if (providerService == null) {
                 return new ProviderServiceResponse {
@@ -40,8 +42,7 @@ namespace PruebaTecnicaTekus.Commands.ProviderServices
             providerService.ServiceID = request.ServiceId;
             providerService.StartDate = request.StartDate;
 
-            _context.ProviderServices.Update(providerService);
-            var result = await _context.SaveChangesAsync(cancellationToken);
+            var result = await _providerServicesRepository.UpdateAsync(providerService);
 
             if (result > 0) {
                 return new ProviderServiceResponse {
