@@ -17,7 +17,7 @@ namespace PruebaTecnicaTekus.Commands.CustomProviderField
     {
         private readonly ICustomProviderFieldRepository _repository;
 
-        public CreateCustomFieldCommandHandler(TekusContext context, ICustomProviderFieldRepository repository) {
+        public CreateCustomFieldCommandHandler( ICustomProviderFieldRepository repository) {
             _repository = repository;
         }
 
@@ -41,7 +41,8 @@ namespace PruebaTecnicaTekus.Commands.CustomProviderField
 
             return new CustomProviderFieldResponse {
                 IsSuccess = false,
-                Id = null
+                Id = null,
+                ErrorMessage = $"There was a problem inserting a customer provider field"
             };
         }
     }

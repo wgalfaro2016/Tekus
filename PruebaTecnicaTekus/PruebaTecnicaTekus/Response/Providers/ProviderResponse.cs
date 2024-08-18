@@ -4,5 +4,6 @@
     {
         public bool IsSuccess { get; set; }
         public int? ProviderId { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

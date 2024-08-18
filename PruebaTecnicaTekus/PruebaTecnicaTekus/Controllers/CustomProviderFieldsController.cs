@@ -24,7 +24,7 @@ namespace PruebaTecnicaTekus.Controllers
                 return CreatedAtAction(nameof(GetCustomProviderFieldById), new { id = response.Id.Value }, new { id = response.Id });
             }
             else {
-                return BadRequest("Unable to create Customer provider field.");
+                return BadRequest($"There is an error: {response.ErrorMessage}");
             }
         }
 

@@ -40,20 +40,26 @@ namespace PruebaTecnicaTekus.Controllers
         [HttpPost("CreateProviderService")]
         public async Task<ActionResult<ProviderServiceDto>> CreateProviderService([FromBody] CreateProviderServiceCommand command)
         {
-            var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetProviderServiceById), new { id = result.ProviderServiceId }, result);
+            var response = await _mediator.Send(command);
+            if (response.IsSuccess && response.ProviderServiceId.HasValue) {
+                return CreatedAtAction(nameof(GetProviderServiceById), new { id = response.ProviderServiceId.Value }, new { id = response.ProviderServiceId });
+            }
+            else {
+                return BadRequest($"There is an error: {response.ErrorMessage}");
+            }
         }
 
         [HttpPut("UpdateProviderService")]
         public async Task<IActionResult> UpdateProviderService([FromBody] UpdateProviderServiceCommand command) 
         {
             
-            var result = await _mediator.Send(command);
-            if (result == null) {
-                return NotFound();
+            var response = await _mediator.Send(command);
+            if (response.IsSuccess && response.ProviderServiceId.HasValue) {
+                return CreatedAtAction(nameof(GetProviderServiceById), new { id = response.ProviderServiceId.Value }, new { id = response.ProviderServiceId });
             }
-
-            return NoContent();
+            else {
+                return BadRequest($"There is an error: {response.ErrorMessage}");
+            }
         }
     }
 }

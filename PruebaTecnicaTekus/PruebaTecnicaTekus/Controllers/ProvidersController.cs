@@ -28,7 +28,7 @@ namespace PruebaTecnicaTekus.Controllers
                 return CreatedAtAction(nameof(GetProviderById), new { id = response.ProviderId.Value }, new { id = response.ProviderId });
             }
             else {
-                return BadRequest("Unable to create provider.");
+                return BadRequest($"There is an error: {response.ErrorMessage}");
             }
         }
 
@@ -40,7 +40,7 @@ namespace PruebaTecnicaTekus.Controllers
                 return CreatedAtAction(nameof(GetProviderById), new { id = response.ProviderId.Value }, new { id = response.ProviderId });
             }
             else {
-                return BadRequest("Unable to update provider.");
+                return BadRequest($"There is an error: {response.ErrorMessage}");
             }
         }
 

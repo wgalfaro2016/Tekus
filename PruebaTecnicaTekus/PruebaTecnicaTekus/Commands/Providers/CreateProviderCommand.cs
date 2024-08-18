@@ -47,7 +47,8 @@ namespace PruebaTecnicaTekus.Commands.Providers
 
             return new ProviderResponse {
                 IsSuccess = false,
-                ProviderId = null
+                ProviderId = null,
+                ErrorMessage = $"There was a problem inserting a provider"
             };
         }
     }

@@ -30,7 +30,8 @@ namespace PruebaTecnicaTekus.Commands.Providers
             if (provider == null) {
                 return new ProviderResponse {
                     IsSuccess = false,
-                    ProviderId = null
+                    ProviderId = null,
+                    ErrorMessage = $"Provider {request.ProviderID} doesn't exists"
                 };
             }
 
@@ -52,7 +53,8 @@ namespace PruebaTecnicaTekus.Commands.Providers
 
             return new ProviderResponse {
                 IsSuccess = false,
-                ProviderId = null
+                ProviderId = null,
+                ErrorMessage = $"There was a problem updating the provider - provider id {request.ProviderID}"
             };
         }
 
