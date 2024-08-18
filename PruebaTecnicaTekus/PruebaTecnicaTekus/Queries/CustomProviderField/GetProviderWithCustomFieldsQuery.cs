@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Dtos;
+using PruebaTecnicaTekus.Repositories.Providers;
 
 namespace PruebaTecnicaTekus.Queries.CustomProviderField
 {
@@ -13,18 +14,17 @@ namespace PruebaTecnicaTekus.Queries.CustomProviderField
 
     public class GetProviderWithCustomFieldsQueryHandler : IRequestHandler<GetProviderWithCustomFieldsQuery, ProviderWithCustomFieldsDto>
     {
-        private readonly TekusContext _context;
+        private readonly IProvidersRepository _providersRepository;
         private readonly IMapper _mapper;
 
-        public GetProviderWithCustomFieldsQueryHandler(TekusContext context, IMapper mapper) {
-            _context = context;
+        public GetProviderWithCustomFieldsQueryHandler(IProvidersRepository providersRepository, IMapper mapper) 
+        {
+            _providersRepository = providersRepository;
             _mapper = mapper;
         }
 
         public async Task<ProviderWithCustomFieldsDto> Handle(GetProviderWithCustomFieldsQuery request, CancellationToken cancellationToken) {
-            var provider = await _context.Providers
-                .Include(p => p.CustomProviderFields) 
-                .FirstOrDefaultAsync(p => p.ProviderID == request.ID, cancellationToken);
+            var provider = await _providersRepository.GetProviderWithCustomFieldsAsync(request.ID);
 
             if (provider == null) {
                 return null;

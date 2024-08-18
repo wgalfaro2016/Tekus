@@ -2,6 +2,7 @@
 using MediatR;
 using PruebaTecnicaTekus.Data;
 using PruebaTecnicaTekus.Dtos;
+using PruebaTecnicaTekus.Repositories.Providers;
 
 namespace PruebaTecnicaTekus.Queries.Providers
 {
@@ -12,16 +13,16 @@ namespace PruebaTecnicaTekus.Queries.Providers
 
     public class GetProviderByIdQueryHandler : IRequestHandler<GetProviderByIdQuery, ProviderDto>
     {
-        private readonly TekusContext _context;
+        private readonly IProvidersRepository _providersRepository;
         private readonly IMapper _mapper;
 
-        public GetProviderByIdQueryHandler(TekusContext context, IMapper mapper) {
-            _context = context;
+        public GetProviderByIdQueryHandler(IProvidersRepository providersRepository, IMapper mapper) {
+            _providersRepository = providersRepository;
             _mapper = mapper;
         }
 
         public async Task<ProviderDto> Handle(GetProviderByIdQuery request, CancellationToken cancellationToken) {
-            var provider = await _context.Providers.FindAsync(request.ProviderID);
+            var provider = await _providersRepository.GetByIdAsync(request.ProviderID);
             return _mapper.Map<ProviderDto>(provider);
         }
     }

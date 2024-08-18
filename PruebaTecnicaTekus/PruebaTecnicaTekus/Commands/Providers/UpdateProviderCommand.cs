@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PruebaTecnicaTekus.Data;
+using PruebaTecnicaTekus.Repositories.Providers;
 using PruebaTecnicaTekus.Response.Providers;
 
 namespace PruebaTecnicaTekus.Commands.Providers
@@ -17,14 +18,15 @@ namespace PruebaTecnicaTekus.Commands.Providers
 
     public class UpdateProviderCommandHandler : IRequestHandler<UpdateProviderCommand,ProviderResponse>
     {
-        private readonly TekusContext _context;
+        private readonly IProvidersRepository _providersRepository;
 
-        public UpdateProviderCommandHandler(TekusContext context) {
-            _context = context;
+        public UpdateProviderCommandHandler(IProvidersRepository providersRepository)
+        {
+            _providersRepository = providersRepository;
         }
 
         public async Task<ProviderResponse> Handle(UpdateProviderCommand request, CancellationToken cancellationToken) {
-            var provider = await _context.Providers.FindAsync(request.ProviderID);
+            var provider = await _providersRepository.GetByIdAsync(request.ProviderID);
             if (provider == null) {
                 return new ProviderResponse {
                     IsSuccess = false,
@@ -39,7 +41,7 @@ namespace PruebaTecnicaTekus.Commands.Providers
             provider.Phone = request.Phone;
             provider.Email = request.Email;
 
-            var result = await _context.SaveChangesAsync(cancellationToken);
+            var result = await _providersRepository.UpdateAsync(provider);
 
             if (result > 0) {
                 return new ProviderResponse {
